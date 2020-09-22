@@ -174,7 +174,7 @@ class BaseTrainer:
             'optimizer': self.optimizer.state_dict(),
             'monitor_best': self.mnt_best,
             'config': self.config,
-            'classes':self.model.classes
+            'classes': self.model.classes
         }
 
         filename = os.path.join(self.checkpoint_dir, 'checkpoint-current.pth')
@@ -208,4 +208,3 @@ class BaseTrainer:
         self.train_logger = checkpoint['logger']
         self.logger.info("Checkpoint '{}' (epoch {}) loaded".format(resume_path, self.start_epoch))
 
-        

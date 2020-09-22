@@ -1,0 +1,56 @@
+{
+    "name"          :   "Audio Testing",
+    "data"          :   {
+                            "type"      :   "FolderDataManager",
+                            "path"      :   "C:/Dataset/multi_class_audios",
+                            "format"    :   "audio",
+                            "loader"    :   {
+                                                "shuffle"       : true,
+                                                "batch_size"    : 6,
+                                                "num_workers"   : 0,
+                                                "drop_last"     : true
+                                            },
+                            "splits"    :   {
+                                                "train" : 0.7,
+                                                "val"   : 0.3
+                                            }
+                        },
+    "transforms"    :   {
+                            "type"      :   "AudioTransforms",
+                            "args"      :   {
+                                                "channels"       : "avg",
+                                                "noise"    : [0.3, 0.001],
+                                                "crop"     : [0.4, 0.25]
+                                            }
+                        },
+    "optimizer"     :   {
+                            "type"      :   "Adam",
+                            "args"      :   {
+                                                "lr"            : 0.002,
+                                                "weight_decay"  : 0.01,
+                                                "amsgrad"       : true
+                                            }
+                        },
+    "lr_scheduler"   :   {
+                            "type"      :   "StepLR",
+                            "args"      :   {
+                                                "step_size" : 10,
+                                                "gamma"     : 0.5
+                                            }
+                        },
+    "model"         :   {
+                            "type"      :   "AudioCRNN"
+                        },
+    "train"         :   {
+                            "loss"      :   "nll_loss",
+                            "epochs"    :   100,
+                            "save_dir"  :   "saved_cv/",
+                            "save_p"    :   1,
+                            "verbosity" :   2,
+
+                            "monitor"   :   "min val_loss",
+                            "early_stop":   8,
+                            "tbX"       :   true
+                        },
+    "metrics"       :   "classification_metrics"
+}
