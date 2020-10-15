@@ -61,7 +61,17 @@ def infer(file_path, checkpoint_path):
     return label, conf
 
 
+# 获取每次训练得到的最佳模型的文件路径
+def get_model_paths():
+    model_paths = []
+    for train_time in os.listdir("./saved_cv"):
+        model_paths.append(os.path.abspath(os.path.join("./saved_cv", train_time, "checkpoints", "model_best.pth")))
+    return sorted(model_paths)
+
+
 if __name__ == "__main__":
-    audio_path = "/Users/admin/Public/数据/多分类样本/003/003__03.wav"
-    model_path = "/Users/admin/PycharmProjects/crnn-audio-classification/saved_cv/1015_175032/checkpoints/model_best.pth"
-    infer(audio_path, model_path)
+    # audio_path = "/Users/admin/Public/数据/多分类样本/003/003__03.wav"
+    # model_path = "/Users/admin/PycharmProjects/crnn-audio-classification/saved_cv/1015_175032/checkpoints/model_best.pth"
+    # infer(audio_path, model_path)
+
+    print(get_model_paths())
