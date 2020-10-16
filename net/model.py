@@ -9,7 +9,6 @@ rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
 
 from net.base_model import BaseModel
-from data.data_manager import FolderDataManager
 
 # F.max_pool2d needs kernel_size and stride. If only one argument is passed, 
 # then kernel_size = stride
