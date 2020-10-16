@@ -1,12 +1,22 @@
 import torch
+from torch import arange
 import torch.nn as nn
 import torch.nn.functional as F
-from .base_model import BaseModel
+import json
+
+import sys
+import os
+curPath = os.path.abspath(os.path.dirname(__file__))
+rootPath = os.path.split(curPath)[0]
+sys.path.append(rootPath)
+
+from net.base_model import BaseModel
+from data.data_manager import FolderDataManager
 
 # F.max_pool2d needs kernel_size and stride. If only one argument is passed, 
 # then kernel_size = stride
 
-from .audio import MelspectrogramStretch
+from net.audio import MelspectrogramStretch
 from torchparse import parse_cfg
 
 # Architecture inspiration from: https://github.com/keunwoochoi/music-auto_tagging-keras
@@ -80,8 +90,13 @@ class AudioCRNN(BaseModel):
         with torch.no_grad():
             out_raw = self.forward( x )
             out = torch.exp(out_raw)
-            max_ind = out.argmax().item()        
-            return self.classes[max_ind], out[:,max_ind].item()
+            max_ind = out.argmax().item()
+            # print("类别: ", self.classes)
+            # with open("/Users/admin/PycharmProjects/crnn-audio-classification/my-config.json", "r") as f:
+            #     config = json.load(f)
+            # data_manager = FolderDataManager(config["data"])
+            # mapping = data_manager.mappings["idx_to_class"]     
+            return max_ind, out[:,max_ind].item()
 
 
 class AudioCNN(AudioCRNN):
