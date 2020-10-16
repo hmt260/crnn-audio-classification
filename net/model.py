@@ -1,12 +1,19 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from .base_model import BaseModel
+
+import sys
+import os
+curPath = os.path.abspath(os.path.dirname(__file__))
+rootPath = os.path.split(curPath)[0]
+sys.path.append(rootPath)
+
+from net.base_model import BaseModel
 
 # F.max_pool2d needs kernel_size and stride. If only one argument is passed, 
 # then kernel_size = stride
 
-from .audio import MelspectrogramStretch
+from net.audio import MelspectrogramStretch
 from torchparse import parse_cfg
 
 # Architecture inspiration from: https://github.com/keunwoochoi/music-auto_tagging-keras
@@ -80,8 +87,8 @@ class AudioCRNN(BaseModel):
         with torch.no_grad():
             out_raw = self.forward( x )
             out = torch.exp(out_raw)
-            max_ind = out.argmax().item()        
-            return self.classes[max_ind], out[:,max_ind].item()
+            max_ind = out.argmax().item()     
+            return max_ind, out[:,max_ind].item()
 
 
 class AudioCNN(AudioCRNN):
