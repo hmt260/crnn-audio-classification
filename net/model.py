@@ -1,8 +1,6 @@
 import torch
-from torch import arange
 import torch.nn as nn
 import torch.nn.functional as F
-import json
 
 import sys
 import os
@@ -90,12 +88,7 @@ class AudioCRNN(BaseModel):
         with torch.no_grad():
             out_raw = self.forward( x )
             out = torch.exp(out_raw)
-            max_ind = out.argmax().item()
-            # print("类别: ", self.classes)
-            # with open("/Users/admin/PycharmProjects/crnn-audio-classification/my-config.json", "r") as f:
-            #     config = json.load(f)
-            # data_manager = FolderDataManager(config["data"])
-            # mapping = data_manager.mappings["idx_to_class"]     
+            max_ind = out.argmax().item()     
             return max_ind, out[:,max_ind].item()
 
 
