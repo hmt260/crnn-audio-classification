@@ -6,37 +6,23 @@ from DataProvider import get_transform
 
 # 在模块内初始化为全局对象，在其他模块引入对象，是天然的单例模式
 class TrainMonitor:
-    def __init__(self, config=None, model_config=None, resume=None):
+    def __init__(self, config=None, model_config=None):
         self.config = config
         self.model_config = model_config
-        self.resume = resume
 
     def train(self):
-        if self.resume:
-            checkpoint = torch.load(self.resume)
-            self.resume_config = checkpoint['config']
-            with open("train_status.log", "w", encoding="utf-8") as f:
-                f.write("开始")
-            try:
-                train_main(self.resume_config, self.resume)
-            # 处理一下手动打断训练的情况
-            except KeyboardInterrupt:
-                pass
-            with open("train_status.log", "w", encoding="utf-8") as f:
-                    f.write("结束")
-        else:
-            with open(self.config, "r") as f:
-                config = json.load(f)
-                config['cfg'] = self.model_config
-            with open("train_status.log", "w", encoding="utf-8") as f:
-                f.write("开始")
-            try:
-                train_main(config, None)
-            # 处理一下手动打断训练的情况
-            except KeyboardInterrupt:
-                pass
-            with open("train_status.log", "w", encoding="utf-8") as f:
-                f.write("结束")
+        with open(self.config, "r") as f:
+            config = json.load(f)
+            config['cfg'] = self.model_config
+        with open("train_status.log", "w", encoding="utf-8") as f:
+            f.write("开始")
+        try:
+            train_main(config, None)
+        # 处理一下手动打断训练的情况
+        except KeyboardInterrupt:
+            pass
+        with open("train_status.log", "w", encoding="utf-8") as f:
+            f.write("结束")
     
     @property
     def train_status(self):
